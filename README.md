@@ -97,8 +97,29 @@ build with `mkdocs serve` (`pip install -e .[docs]`).
 
 ## Benchmarks
 
-One command sweeps strategies × keep ratios and writes `results.json`, a
-markdown table, and accuracy/efficiency plots:
+**LLaVA-1.5-7B on VQAv2** (300-sample validation subset, greedy decoding):
+
+| strategy | visual tokens | VQAv2 acc | vs baseline | prefill speedup |
+|---|---|---|---|---|
+| baseline | 576 (100%) | 80.4 | — | 1.0× |
+| **DivPrune** | 58 (10%) | **76.3** | **95%** | **3.6×** |
+| DivPrune | 115 (20%) | 76.6 | 95% | 2.6× |
+| ToMe | 115 (20%) | 77.2 | 96% | 2.7× |
+| ToMe | 58 (10%) | 74.2 | 92% | 3.7× |
+| random *(ablation)* | 58 (10%) | 73.7 | 92% | 3.6× |
+| fastv *(ablation)* | 58 (10%) | 45.9 | 57% | 3.6× |
+
+DivPrune keeps **~95% of VQAv2 accuracy at 10% of the visual tokens with 3.6×
+faster prefill** — in line with the retention reported in the DivPrune paper
+([arXiv:2503.02175](https://arxiv.org/abs/2503.02175); their LLaVA-1.5-7B run
+retains ~93%). On coarse tasks like VQAv2, pruning is nearly free for *any*
+method, so `random` stays competitive; DivPrune's edge grows on
+detail-sensitive tasks — on TextVQA it retains ~86% and beats `random` ~3×,
+while the naive pre-LLM attention proxy `fastv` collapses there (as it does in
+the original papers). Peak memory is roughly flat at these short sequence
+lengths — the memory win shows in long-context / multi-image settings.
+
+Reproduce, or sweep your own model:
 
 ```bash
 pip install "fastvision[bench] @ git+https://github.com/Cekaru/fastvision.git"
