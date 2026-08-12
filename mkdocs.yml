@@ -1,0 +1,35 @@
+site_name: FastVision
+site_description: Zero-fine-tuning visual token pruning for Hugging Face multimodal LLMs
+repo_url: https://github.com/fastvision/fastvision
+repo_name: fastvision/fastvision
+
+theme:
+  name: material
+  palette:
+    - scheme: default
+      primary: deep purple
+      toggle:
+        icon: material/weather-night
+        name: Dark mode
+    - scheme: slate
+      primary: deep purple
+      toggle:
+        icon: material/weather-sunny
+        name: Light mode
+  features:
+    - content.code.copy
+    - navigation.sections
+
+nav:
+  - Quickstart: index.md
+  - How it works: how-it-works.md
+  - Strategies: strategies.md
+  - Writing an adapter: adapters.md
+  - Benchmarks: benchmarks.md
+  - API reference: api.md
+
+markdown_extensions:
+  - admonition
+  - pymdownx.highlight
+  - pymdownx.superfences
+  - tables
