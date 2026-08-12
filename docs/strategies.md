@@ -6,7 +6,7 @@ Select with `FastVisionWrapper(model, strategy="...")`. All are training-free.
 |---|---|---|---|
 | `divprune` | select | Max-Min diversity via farthest-point sampling | **Default.** Best accuracy retention across tasks |
 | `tome` | merge | Iterative bipartite soft matching; size-weighted, mass-conserving averaging | Aggressive ratios where dropped information should be folded into survivors |
-| `fastv` | select | Text-query × visual-token attention scoring at the feature boundary | Text-grounded tasks; keeps prompt-relevant tokens |
+| `fastv` | select | Text-query × visual-token attention scoring at the feature boundary | Experimental / ablation. A pre-LLM attention proxy — the mean-prompt query is a weak relevance signal, so it underperforms diversity selection; kept mainly to show why DivPrune is the default |
 | `aot` | merge | Sinkhorn optimal transport onto farthest-point anchors (experimental) | Research/ablation |
 | `random` | select | Uniform random subset | Ablation baseline |
 | `uniform` | select | Even spatial stride | Ablation baseline |

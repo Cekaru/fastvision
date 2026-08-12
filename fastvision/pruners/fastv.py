@@ -22,6 +22,7 @@ from __future__ import annotations
 import logging
 
 import torch
+import torch.nn.functional as F
 
 from .base import Pruner
 
@@ -49,5 +50,14 @@ class FastVPruner(Pruner):
                 f"meta['query'] must be [D] or [B, D] with B={B}, D={D}, "
                 f"got shape {tuple(query.shape)}"
             )
-        scores = torch.einsum("bnd,bd->bn", feats.float(), query) / D**0.5
+        # Score by *directional* alignment with the query, not raw magnitude.
+        # A plain dot product is dominated by token norm and the shared DC
+        # component of the visual features (the mean feature direction), so it
+        # ends up keeping high-norm/generic background tokens regardless of the
+        # prompt. Mean-centering removes that DC component and cosine removes
+        # the norm bias, leaving how much each token points toward the query.
+        feats_centered = feats.float() - feats.float().mean(dim=1, keepdim=True)
+        scores = torch.einsum(
+            "bnd,bd->bn", F.normalize(feats_centered, dim=-1), F.normalize(query, dim=-1)
+        )
         return scores.topk(keep, dim=1).indices.sort(dim=1).values

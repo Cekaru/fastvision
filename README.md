@@ -87,7 +87,7 @@ to force it. New families are a small adapter subclass — see
 |---|---|---|
 | `divprune` | select | Max-Min diversity, farthest-point sampling (**default**) |
 | `tome` | merge | bipartite soft matching, size-weighted & mass-conserving |
-| `fastv` | select | text-query attention scoring at the feature boundary |
+| `fastv` | select | text-query attention scoring at the feature boundary (experimental — attention-proxy ablation) |
 | `aot` | merge | Sinkhorn optimal transport onto diverse anchors (experimental) |
 | `random` / `uniform` / `topnorm` | select | ablation baselines |
 
